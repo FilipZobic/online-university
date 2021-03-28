@@ -7,6 +7,7 @@ import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.StandardReflectionParameterNameDiscoverer;
 import org.springframework.core.annotation.Order;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -16,6 +17,7 @@ import rs.ac.singidunum.org.apiusers.dto.response.AdministratorDto;
 import rs.ac.singidunum.org.apiusers.dto.response.AdministratorResponseDto;
 import rs.ac.singidunum.org.apiusers.model.Administrator;
 import rs.ac.singidunum.org.apiusers.service.AdministratorService;
+import rs.ac.singidunum.org.apiusers.dto.request.AdministratorRequestDto;
 
 import java.util.Optional;
 
@@ -25,6 +27,8 @@ import java.util.Optional;
 public class ControllerAop {
 
     AdministratorService service;
+
+    private final String packagePath = "rs.ac.singidunum.org.apiusers.controller";
 
     @Autowired
     public void setService(AdministratorService service) {
@@ -45,13 +49,15 @@ public class ControllerAop {
         }
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
-    // post ne radi iz nekog razloga
+    // post ne radi iz nekog razloga ne registrujuje
     @Around("execution(* rs.ac.singidunum.org.apiusers.controller.AdministratorController.*(Long))" +
-            "&& execution(* rs.ac.singidunum.org.apiusers.controller.AdministratorController.getOneByUsername(String)) +" +
-            "&& execution(* rs.ac.singidunum.org.apiusers.controller.AdministratorController.saveOne(Object))" +
-            "&& execution(* rs.ac.singidunum.org.apiusers.controller.AdministratorController.updateOne(Long, Object))")
+            "&& execution(* rs.ac.singidunum.org.apiusers.controller.AdministratorController" +
+            ".getOneByUsername(String)) +" +
+            "&& execution(* rs.ac.singidunum.org.apiusers.controller.AdministratorController" +
+            ".saveOne(rs.ac.singidunum.org.apiusers.dto.request.AdministratorRequestDto))" +
+            "&& execution(* rs.ac.singidunum.org.apiusers.controller.AdministratorController" +
+            ".updateOne(Long, rs.ac.singidunum.org.apiusers.dto.request.AdministratorRequestDto))")
     public ResponseEntity<AdministratorResponseDto> one(ProceedingJoinPoint joinPoint) {
-        System.out.println("AOP ACTIVATED");
         try {
             ResponseEntity<Administrator> responseEntity = (ResponseEntity<Administrator>)joinPoint.proceed(joinPoint.getArgs());
             if (responseEntity.getBody() != null) {

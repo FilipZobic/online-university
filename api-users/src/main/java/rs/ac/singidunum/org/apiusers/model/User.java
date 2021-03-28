@@ -29,8 +29,8 @@ public class User {
     private boolean isDeleted = false;
 
     @ManyToMany()
-    @JoinTable(joinColumns = @JoinColumn(name = "user_id"),inverseJoinColumns = @JoinColumn(name = "permission_id"))
-    private List<User> users;
+    @JoinTable(name = "user_permission", joinColumns = @JoinColumn(name = "user_id"),inverseJoinColumns = @JoinColumn(name = "permission_id"))
+    private List<Permission> users;
 
     public User(String username, String password, String email) {
         this.username = username;

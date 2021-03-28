@@ -19,6 +19,6 @@ public class Permission {
     private String name;
 
     @ManyToMany()
-    @JoinTable(joinColumns = @JoinColumn(name = "permission_id"),inverseJoinColumns = @JoinColumn(name = "user_id"))
+    @JoinTable(name = "user_permission", joinColumns = @JoinColumn(name = "permission_id"),inverseJoinColumns = @JoinColumn(name = "user_id"))
     private List<User> users;
 }
