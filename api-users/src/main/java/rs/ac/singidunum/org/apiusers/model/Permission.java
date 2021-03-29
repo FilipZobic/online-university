@@ -15,10 +15,12 @@ public class Permission {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String name;
 
     @ManyToMany()
-    @JoinTable(name = "user_permission", joinColumns = @JoinColumn(name = "permission_id"),inverseJoinColumns = @JoinColumn(name = "user_id"))
-    private List<User> users;
+    @JoinTable(name = "role_permission", joinColumns = @JoinColumn(name = "permission_id"),inverseJoinColumns = @JoinColumn(name = "role_id"))
+    private List<Role> users;
+
+    private boolean isDeleted = false;
 }
